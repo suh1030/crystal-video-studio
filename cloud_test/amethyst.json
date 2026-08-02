@@ -2,20 +2,95 @@
   "title": "Amethyst — The Violet Architecture of Quartz",
   "voice": "en-US-AriaNeural",
   "scenes": [
-    {"heading":"A violet first impression","asset_filename":"Amethyst Quartz Macro 1.JPG","search":"amethyst crystal macro mineral","narration":"Amethyst is one of the world's most recognizable minerals. Its familiar color can hide an extraordinary geological story. Every crystal combines quartz, iron, radiation, and immense time. This film explores its science, structure, history, and visual character."},
-    {"heading":"A member of the quartz family","asset_filename":"Amethyst Quartz Macro 2.JPG","search":"amethyst quartz crystal specimen","narration":"Amethyst is the purple variety of quartz. Its chemical formula is simply silicon dioxide. Its atoms form a repeating three-dimensional framework. The crystals often grow as six-sided prisms with pointed ends. Clear quartz and citrine share the same basic structure."},
-    {"heading":"Where the purple comes from","asset_filename":"Amethyst macro.jpg","search":"purple amethyst crystal close up","narration":"Iron and natural radiation create amethyst's violet color. Tiny amounts of iron enter the quartz while it grows. Radiation later changes iron-related defects inside the crystal. Those defects absorb selected wavelengths of visible light. The remaining light appears violet to our eyes."},
-    {"heading":"Zones written in crystal","search":"amethyst color zoning crystal","narration":"Many amethyst crystals do not have perfectly even color. Bands, chevrons, and concentrated purple tips record changing conditions during growth. Under carefully controlled lighting, these zones can look like translucent maps. To a mineral collector, zoning is not necessarily a flaw. It can be evidence of the crystal's history, revealing that temperature, chemistry, or growth rate shifted while layer after layer was being formed."},
-    {"heading":"Born inside open spaces","search":"amethyst geode interior","narration":"Spectacular amethyst often grows inside cavities in volcanic rock. Mineral-rich water moves through fractures and deposits silica along the cavity walls. Over long periods, crystals project inward into the open space, creating a geode lined with points. The rough exterior may look ordinary, while the interior contains an entire violet landscape. This contrast is one reason opening a geode feels so visually dramatic."},
-    {"heading":"Brazilian cathedrals","search":"large amethyst geode Brazil","narration":"Brazil is famous for tall amethyst geodes sometimes called cathedrals. Many come from basalt flows in the state of Rio Grande do Sul. Their crystals may cover cavities large enough to stand beside, producing deep purple interiors framed by layers of agate and volcanic rock. Size alone does not determine quality, but these monumental specimens make geological processes visible at an architectural scale."},
-    {"heading":"The deep color of Uruguay","search":"Uruguay amethyst specimen","narration":"Across the border, Uruguay is known for amethyst with especially saturated color and relatively compact crystal points. Material from the Artigas region is highly valued by collectors. Comparing Brazilian and Uruguayan specimens demonstrates how locality influences appearance. Even when two samples share the same mineral name, their crystal size, color distribution, matrix, and overall character can immediately suggest different geological origins."},
-    {"heading":"African localities","search":"African amethyst mineral specimen","narration":"Important amethyst also comes from Zambia, Namibia, and other African localities. Zambian crystals are often praised for rich color and clarity, sometimes appearing as individual points rather than large geode sections. Namibia has produced distinctive specimens associated with other minerals. Locality information matters because a specimen is more scientifically meaningful when we know where it formed, rather than treating every purple crystal as interchangeable decoration."},
-    {"heading":"Hardness and durability","search":"faceted amethyst gemstone","narration":"Quartz measures seven on the Mohs hardness scale. That makes amethyst resistant to ordinary household dust and suitable for many kinds of jewelry. It is still not indestructible. A sharp impact can chip an edge, and existing fractures may expand. Good care is simple: avoid hard knocks, harsh chemicals, extreme temperature changes, and long exposure to intense sunlight, which can fade the color of some specimens."},
-    {"heading":"From crystal to gemstone","search":"amethyst gemstone cutting faceting","narration":"Transparent material may be cut into faceted gemstones that emphasize brilliance and color. Cutters orient the rough carefully, balancing saturation against unwanted dark areas. Paler or included material may become cabochons, beads, carvings, or polished freeforms. A successful cut does not merely make a crystal shiny. It manages light, proportion, and color so the stone remains lively as it moves."},
-    {"heading":"Heat and transformation","search":"amethyst citrine heated quartz","narration":"Heating can change amethyst from purple to yellow, orange, brown, green, or nearly colorless, depending on its origin and internal chemistry. Much commercial citrine is heat-treated amethyst, although natural citrine also exists. Treatment is not automatically unacceptable, but it should be disclosed accurately. Clear labeling lets collectors distinguish natural appearance, deliberate enhancement, and geological rarity without confusing beauty with scientific identity."},
-    {"heading":"A long human history","search":"antique amethyst jewelry museum","narration":"Amethyst has appeared in carved objects, seals, religious ornaments, and jewelry for thousands of years. Its name comes through Greek tradition and became associated with protection from intoxication. Those beliefs belong to cultural history rather than modern mineral science, but they show how strongly color influences human imagination. Before major deposits were developed, fine amethyst could be treated as a precious stone alongside ruby, sapphire, and emerald."},
-    {"heading":"How to evaluate a specimen","search":"amethyst mineral collection specimen","narration":"When evaluating amethyst, begin with the specimen itself. Look at color under neutral light, inspect crystal tips for damage, notice luster and transparency, and consider whether the matrix adds context. Ask for locality and treatment information. For geodes, check repairs and added cement around the base. The best choice is not always the darkest or most expensive specimen, but the one whose qualities you genuinely enjoy studying."},
-    {"heading":"Responsible collecting","search":"amethyst mine crystals","narration":"Minerals are finite geological objects, and responsible collecting includes questions about origin. Reputable sellers should be willing to discuss locality, treatments, repairs, and legal sourcing. Existing collections, estate specimens, and documented material can be excellent options. Accurate labels preserve scientific and historical value. A small, well-documented collection often teaches more than a large group of attractive stones with no reliable information."},
-    {"heading":"The value of looking closely","search":"amethyst crystals detailed macro","narration":"Amethyst rewards close observation. Its polished surfaces can be luxurious, but natural crystals also preserve growth lines, inclusions, fractures, zoning, and contacts with their host rock. Each feature connects appearance to process. The next time you see an amethyst, move it slowly under soft light and look beyond the word purple. You are seeing quartz transformed by trace elements, radiation, water, and immense spans of time."}
+    {
+      "heading": "A violet first impression",
+      "asset_filename": "Amethyst Quartz Macro 1.JPG",
+      "search": "amethyst crystal macro mineral",
+      "narration": "Amethyst is one of the world's most recognizable minerals. Its familiar color hides an extraordinary geological story. Every crystal combines quartz, iron, radiation, and immense time. This film explores its science, structure, history, and beauty."
+    },
+    {
+      "heading": "A member of the quartz family",
+      "asset_filename": "Amethyst Quartz Macro 2.JPG",
+      "search": "amethyst quartz crystal specimen",
+      "narration": "Amethyst is the purple variety of quartz. Its chemical formula is simply silicon dioxide. Its atoms form a repeating three-dimensional framework. The crystals often grow as six-sided prisms with pointed ends. Clear quartz and citrine share this basic structure."
+    },
+    {
+      "heading": "Where the purple comes from",
+      "asset_filename": "Amethyst macro.jpg",
+      "search": "purple amethyst crystal close up",
+      "narration": "Iron and natural radiation create amethyst's violet color. Tiny amounts of iron enter quartz while it grows. Radiation later changes defects inside the crystal. Those defects absorb selected wavelengths of visible light. The remaining light appears violet to our eyes."
+    },
+    {
+      "heading": "Zones written in crystal",
+      "asset_filename": "Amethyst 4.jpg",
+      "search": "amethyst color zoning crystal",
+      "narration": "Amethyst rarely has perfectly even color. Purple bands record changes during crystal growth. Some crystals show chevrons or darker pointed tips. These patterns are not always flaws. They preserve evidence of changing temperature and chemistry. Each zone becomes a page in the crystal's history."
+    },
+    {
+      "heading": "Born inside open spaces",
+      "asset_filename": "WLA hmns amethyst geode.jpg",
+      "search": "amethyst geode interior",
+      "narration": "Spectacular amethyst often grows inside volcanic rock cavities. Mineral-rich water enters through tiny fractures. Silica slowly settles along the cavity walls. Crystals then project inward into the open space. The plain exterior can conceal a brilliant violet landscape. This hidden contrast makes geodes especially dramatic."
+    },
+    {
+      "heading": "Brazilian cathedrals",
+      "asset_filename": "Amethyst (Brazil) 4 (32412593040).jpg",
+      "search": "large amethyst geode Brazil",
+      "narration": "Brazil produces enormous amethyst geodes called cathedrals. Many come from basalt in Rio Grande do Sul. Their crystals cover tall hollow chambers. Layers of agate often frame the purple interior. These monumental specimens reveal geology at an architectural scale. Their size records unusually stable growth conditions."
+    },
+    {
+      "heading": "The deep color of Uruguay",
+      "asset_filename": "Quartz-208638.jpg",
+      "search": "Uruguay amethyst specimen",
+      "narration": "Uruguay is famous for deeply saturated amethyst. Artigas specimens often have compact crystal points. Their purple color can look remarkably intense. Locality strongly influences a specimen's appearance. Crystal size, matrix, and color can suggest its origin. A label therefore adds important scientific value."
+    },
+    {
+      "heading": "Distinctive crystal forms",
+      "asset_filename": "Quartz-159836.jpg",
+      "search": "amethyst crystal specimen point",
+      "narration": "Not every amethyst forms inside a large geode. Some localities produce elegant individual points. Others create scepters, clusters, or unusual twins. These forms reflect space and growth conditions. A complete natural termination can be highly desirable. Small specimens may rival large geodes in complexity."
+    },
+    {
+      "heading": "Hardness and durability",
+      "asset_filename": "Amethyst (faceted) (Sebago Pluton, Early Permian, ~293 Ma; Deer Hill, north of Stow, Maine, USA) 10.jpg",
+      "search": "faceted amethyst gemstone",
+      "narration": "Quartz measures seven on the Mohs hardness scale. Amethyst therefore works well in many jewelry designs. It can still chip after a sharp impact. Existing fractures also require careful handling. Avoid harsh chemicals and sudden temperature changes. Strong sunlight may fade certain stones over time."
+    },
+    {
+      "heading": "From crystal to gemstone",
+      "asset_filename": "Facet Cut Amethyst.jpg",
+      "search": "amethyst gemstone cutting faceting",
+      "narration": "Transparent amethyst can become a faceted gemstone. Cutters carefully study color and internal fractures. Orientation helps balance brightness and saturation. Dark material may lose life without thoughtful cutting. Paler stones can become beads or polished cabochons. A successful cut makes color move with the light."
+    },
+    {
+      "heading": "Heat and transformation",
+      "asset_filename": "Fausse citrine.jpg",
+      "search": "amethyst citrine heated quartz",
+      "narration": "Heat can transform the color of amethyst. Some stones become yellow, orange, green, or nearly colorless. Much commercial citrine began as heated amethyst. Natural citrine also exists but is less common. Treatment is acceptable when clearly disclosed. Accurate labels protect both collectors and scientific meaning."
+    },
+    {
+      "heading": "A long human history",
+      "asset_filename": "Cardinal gems.png",
+      "search": "antique amethyst gemstone history",
+      "narration": "People have valued amethyst for thousands of years. Ancient artisans carved it into seals and ornaments. Greek traditions connected it with protection from intoxication. Those stories belong to culture, not modern science. Before large deposits appeared, amethyst ranked among precious gems. Its purple color still carries a sense of ceremony."
+    },
+    {
+      "heading": "How to evaluate a specimen",
+      "asset_filename": "Quartz var Amethyst Specimen 22.JPG",
+      "search": "amethyst mineral collection specimen",
+      "narration": "Evaluate amethyst under soft and neutral lighting. Inspect crystal tips for chips or repairs. Notice luster, transparency, and natural color zoning. Check whether the matrix adds useful context. Ask about locality and possible treatments. The best specimen is not always the darkest one."
+    },
+    {
+      "heading": "Responsible collecting",
+      "asset_filename": "Lapworth Museum of Geology - Amethyst.jpg",
+      "search": "amethyst museum mineral specimen",
+      "narration": "Minerals are finite objects from specific places. Responsible collecting begins with reliable origin information. Sellers should disclose treatments, repairs, and restoration. Museum collections preserve valuable geological context. Estate specimens can also be excellent choices. A small documented collection teaches more than anonymous decoration."
+    },
+    {
+      "heading": "The value of looking closely",
+      "asset_filename": "Amethyst Crystals, Cobalt Blue Glow (380880769).jpg",
+      "search": "amethyst crystals detailed macro",
+      "narration": "Amethyst rewards patient and careful observation. Look for growth lines, inclusions, fractures, and color zones. Every feature connects appearance with geological process. Move the crystal slowly beneath soft light. Purple tones will shift across its many faces. You are seeing chemistry shaped by immense spans of time."
+    }
   ]
 }
