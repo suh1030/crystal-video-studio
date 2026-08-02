@@ -1,0 +1,38 @@
+video:
+  width: 1920
+  height: 1080
+  fps: 30
+  duration_seconds: 300
+  scene_seconds: 10
+  background_color: "#120f18"
+
+voice:
+  name: "en-US-AriaNeural"
+  rate: "-5%"
+  volume: "+0%"
+
+subtitles:
+  enabled: true
+  burn_in: true
+  font_name: "Arial"
+  font_size: 18
+  bottom_margin: 56
+
+audio:
+  narration_volume: 1.0
+  music_volume: 0.10
+
+branding:
+  channel_name: "Crystal Stories"
+  intro_text: "{topic}"
+  outro_text: "Thank you for watching"
+
+media:
+  # The workflow always prefers local media. Put files under assets/<topic-slug>/.
+  use_pexels: true
+  max_downloads: 18
+  search_terms:
+    - "{topic} crystal macro"
+    - "{topic} gemstone"
+    - "crystal mineral close up"
+
