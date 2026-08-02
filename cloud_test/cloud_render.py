@@ -35,11 +35,7 @@ def srt_time(value):
 
 def make_subtitles(text, duration, path):
     sentences = re.split(r"(?<=[.!?])\s+", text.strip())
-    cues = []
-    for sentence in sentences:
-        words = sentence.split()
-        while words:
-            cues.append(" ".join(words[:11])); words = words[11:]
+    cues = [sentence.strip() for sentence in sentences if sentence.strip()]
     weights = [max(1, len(c.split())) for c in cues]
     total = sum(weights); now = 0.0; rows = []
     for i, (cue, weight) in enumerate(zip(cues, weights), 1):
@@ -77,7 +73,7 @@ def main(job_path, preview=False):
     silent = BUILD / "silent.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat, "-c", "copy", silent)
     output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
-    subtitle_filter = "subtitles=cloud_build/subtitles.srt:force_style='FontName=DejaVu Sans,FontSize=16,PrimaryColour=&H00FFFFFF,BackColour=&H99000000,BorderStyle=3,Outline=0,Shadow=0,MarginV=38,Alignment=2'"
+    subtitle_filter = "subtitles=cloud_build/subtitles.srt:force_style='FontName=DejaVu Sans,FontSize=13,PrimaryColour=&H00FFFFFF,BackColour=&H88000000,BorderStyle=3,Outline=0,Shadow=0,MarginV=38,Alignment=2,WrapStyle=2'"
     run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-vf", subtitle_filter,
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
         "-shortest", "-movflags", "+faststart", output)
