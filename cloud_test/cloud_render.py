@@ -28,21 +28,37 @@ def download_asset(scene, target):
             raise RuntimeError(f"Image too small: {filename} ({im.width}x{im.height})")
     print(f"Downloaded real asset: {filename}")
 
-def srt_time(value):
-    ms = round(value * 1000)
-    h, ms = divmod(ms, 3600000); m, ms = divmod(ms, 60000); s, ms = divmod(ms, 1000)
-    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+def ass_time(value):
+    centiseconds = round(value * 100)
+    h, centiseconds = divmod(centiseconds, 360000); m, centiseconds = divmod(centiseconds, 6000)
+    s, centiseconds = divmod(centiseconds, 100)
+    return f"{h}:{m:02d}:{s:02d}.{centiseconds:02d}"
 
 def make_subtitles(text, duration, path):
     sentences = re.split(r"(?<=[.!?])\s+", text.strip())
     cues = [sentence.strip() for sentence in sentences if sentence.strip()]
     weights = [max(1, len(c.split())) for c in cues]
-    total = sum(weights); now = 0.0; rows = []
-    for i, (cue, weight) in enumerate(zip(cues, weights), 1):
+    total = sum(weights); now = 0.0
+    rows = ["""[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sentence,DejaVu Sans,26,&H00FFFFFF,&H00FFFFFF,&H00000000,&H70000000,0,0,0,0,100,100,0,0,3,0,0,2,40,40,44,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+"""]
+    for cue, weight in zip(cues, weights):
         end = now + duration * weight / total
-        rows.append(f"{i}\n{srt_time(now)} --> {srt_time(end)}\n{cue}\n")
+        safe_cue = cue.replace("{", "(").replace("}", ")").replace("\n", " ")
+        rows.append(f"Dialogue: 0,{ass_time(now)},{ass_time(end)},Sentence,,0,0,0,,{safe_cue}\n")
         now = end
-    path.write_text("\n".join(rows))
+    path.write_text("".join(rows))
 
 def main(job_path, preview=False):
     job = json.loads(Path(job_path).read_text())
@@ -57,7 +73,7 @@ def main(job_path, preview=False):
     duration = float(subprocess.check_output([
         "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", BUILD / "narration.mp3"
     ], text=True).strip())
-    make_subtitles(script, duration, BUILD / "subtitles.srt")
+    make_subtitles(script, duration, BUILD / "subtitles.ass")
     scene_len = duration / len(scenes); segments = []
     for i, scene in enumerate(scenes):
         image = BUILD / f"image-{i:02d}.jpg"
@@ -73,7 +89,7 @@ def main(job_path, preview=False):
     silent = BUILD / "silent.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat, "-c", "copy", silent)
     output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
-    subtitle_filter = "subtitles=cloud_build/subtitles.srt:force_style='FontName=DejaVu Sans,FontSize=13,PrimaryColour=&H00FFFFFF,BackColour=&H88000000,BorderStyle=3,Outline=0,Shadow=0,MarginV=38,Alignment=2,WrapStyle=2'"
+    subtitle_filter = "subtitles=cloud_build/subtitles.ass"
     run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-vf", subtitle_filter,
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
         "-shortest", "-movflags", "+faststart", output)
