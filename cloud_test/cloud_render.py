@@ -69,7 +69,7 @@ def main(job_path, preview=False):
     script = "\n\n".join(s["narration"] for s in scenes)
     (BUILD / "narration.txt").write_text(script)
     run(sys.executable, "-m", "edge_tts", "--voice", job.get("voice", "en-US-AriaNeural"),
-        "--rate=+5%", "--file", BUILD / "narration.txt", "--write-media", BUILD / "narration.mp3")
+        "--rate=+12%", "--file", BUILD / "narration.txt", "--write-media", BUILD / "narration.mp3")
     duration = float(subprocess.check_output([
         "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", BUILD / "narration.mp3"
     ], text=True).strip())
