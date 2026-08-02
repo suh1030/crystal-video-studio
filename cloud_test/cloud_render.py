@@ -1,68 +1,71 @@
 #!/usr/bin/env python3
-import json, math, subprocess, sys, urllib.parse
+import argparse, json, math, re, subprocess, sys, urllib.parse
 from pathlib import Path
 
 import requests
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 BUILD = ROOT / "cloud_build"
+USER_AGENT = "CrystalVideoStudio/1.1 (https://github.com/suh1030/crystal-video-studio)"
 
 def run(*args):
     subprocess.run([str(x) for x in args], check=True)
 
-def commons_image(query, target, seen):
-    params = {
-        "action": "query", "generator": "search", "gsrsearch": query,
-        "gsrnamespace": 6, "gsrlimit": 20, "prop": "imageinfo",
-        "iiprop": "url|mime", "iiurlwidth": 1920, "format": "json",
-    }
-    data = requests.get("https://commons.wikimedia.org/w/api.php", params=params,
-                        headers={"User-Agent": "CrystalVideoStudio/1.0"}, timeout=30).json()
-    for page in data.get("query", {}).get("pages", {}).values():
-        info = (page.get("imageinfo") or [{}])[0]
-        url = info.get("thumburl") or info.get("url")
-        if not url or url in seen or info.get("mime") not in {"image/jpeg", "image/png"}:
-            continue
-        content = requests.get(url, headers={"User-Agent": "CrystalVideoStudio/1.0"}, timeout=45).content
-        target.write_bytes(content)
-        try:
-            with Image.open(target) as im:
-                if im.width >= 700 and im.height >= 500:
-                    seen.add(url); return True
-        except Exception:
-            pass
-    return False
+def download_asset(scene, target):
+    filename = scene["asset_filename"]
+    url = "https://commons.wikimedia.org/wiki/Special:Redirect/file/" + urllib.parse.quote(filename) + "?width=1920"
+    response = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=60)
+    response.raise_for_status()
+    content_type = response.headers.get("content-type", "")
+    if not content_type.startswith("image/"):
+        raise RuntimeError(f"Not an image: {filename} ({content_type})")
+    target.write_bytes(response.content)
+    with Image.open(target) as im:
+        im.verify()
+    with Image.open(target) as im:
+        if im.width < 700 or im.height < 450:
+            raise RuntimeError(f"Image too small: {filename} ({im.width}x{im.height})")
+    print(f"Downloaded real asset: {filename}")
 
-def fallback_card(target, title, subtitle):
-    im = Image.new("RGB", (1920, 1080), "#0d0912")
-    d = ImageDraw.Draw(im)
-    for r in range(720, 40, -8):
-        c = (35 + r // 20, 16 + r // 35, 52 + r // 16)
-        d.ellipse((960-r, 540-r, 960+r, 540+r), fill=c)
-    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 92)
-    small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 34)
-    d.text((110, 760), title, font=font, fill="white")
-    d.text((116, 880), subtitle, font=small, fill="#d4bddf")
-    im.save(target, quality=94)
+def srt_time(value):
+    ms = round(value * 1000)
+    h, ms = divmod(ms, 3600000); m, ms = divmod(ms, 60000); s, ms = divmod(ms, 1000)
+    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
 
-def main(job_path):
+def make_subtitles(text, duration, path):
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    cues = []
+    for sentence in sentences:
+        words = sentence.split()
+        while words:
+            cues.append(" ".join(words[:11])); words = words[11:]
+    weights = [max(1, len(c.split())) for c in cues]
+    total = sum(weights); now = 0.0; rows = []
+    for i, (cue, weight) in enumerate(zip(cues, weights), 1):
+        end = now + duration * weight / total
+        rows.append(f"{i}\n{srt_time(now)} --> {srt_time(end)}\n{cue}\n")
+        now = end
+    path.write_text("\n".join(rows))
+
+def main(job_path, preview=False):
     job = json.loads(Path(job_path).read_text())
     BUILD.mkdir(exist_ok=True)
-    script = "\n\n".join(s["narration"] for s in job["scenes"])
+    scenes = job["scenes"][:3] if preview else job["scenes"]
+    if preview:
+        scenes = [{**s, "narration": re.split(r"(?<=[.!?])\s+", s["narration"])[0]} for s in scenes]
+    script = "\n\n".join(s["narration"] for s in scenes)
     (BUILD / "narration.txt").write_text(script)
     run(sys.executable, "-m", "edge_tts", "--voice", job.get("voice", "en-US-AriaNeural"),
-        "--rate=-8%", "--file", BUILD / "narration.txt", "--write-media", BUILD / "narration.mp3",
-        "--write-subtitles", BUILD / "subtitles.srt")
+        "--rate=+5%", "--file", BUILD / "narration.txt", "--write-media", BUILD / "narration.mp3")
     duration = float(subprocess.check_output([
         "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", BUILD / "narration.mp3"
     ], text=True).strip())
-    scene_len = duration / len(job["scenes"])
-    seen = set(); segments = []
-    for i, scene in enumerate(job["scenes"]):
+    make_subtitles(script, duration, BUILD / "subtitles.srt")
+    scene_len = duration / len(scenes); segments = []
+    for i, scene in enumerate(scenes):
         image = BUILD / f"image-{i:02d}.jpg"
-        ok = commons_image(scene["search"], image, seen)
-        if not ok: fallback_card(image, job["title"], scene["heading"])
+        download_asset(scene, image)
         segment = BUILD / f"segment-{i:02d}.mp4"
         frames = max(1, math.ceil(scene_len * 30))
         run("ffmpeg", "-y", "-loop", "1", "-i", image, "-vf",
@@ -73,12 +76,13 @@ def main(job_path):
     concat.write_text("".join(f"file '{p.name}'\n" for p in segments))
     silent = BUILD / "silent.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat, "-c", "copy", silent)
-    output = ROOT / "amethyst-five-minute.mp4"
-    subtitle_filter = "subtitles=cloud_build/subtitles.srt:force_style='FontName=DejaVu Sans,FontSize=19,PrimaryColour=&H00FFFFFF,BackColour=&H99000000,BorderStyle=3,Outline=0,Shadow=0,MarginV=38'"
+    output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
+    subtitle_filter = "subtitles=cloud_build/subtitles.srt:force_style='FontName=DejaVu Sans,FontSize=16,PrimaryColour=&H00FFFFFF,BackColour=&H99000000,BorderStyle=3,Outline=0,Shadow=0,MarginV=38,Alignment=2'"
     run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-vf", subtitle_filter,
-        "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
         "-shortest", "-movflags", "+faststart", output)
     print(f"Created {output} ({duration:.1f} seconds)")
 
 if __name__ == "__main__":
-    main(sys.argv[1])
+    parser = argparse.ArgumentParser(); parser.add_argument("job"); parser.add_argument("--preview", action="store_true")
+    args = parser.parse_args(); main(args.job, args.preview)
