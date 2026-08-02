@@ -2,11 +2,6 @@ name: Render Amethyst five-minute video
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - cloud_test/amethyst.json
-      - cloud_test/cloud_render.py
-      - .github/workflows/render-amethyst.yml
 
 jobs:
   render:
