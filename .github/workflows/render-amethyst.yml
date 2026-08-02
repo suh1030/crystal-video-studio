@@ -1,0 +1,28 @@
+name: Render Amethyst five-minute video
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - cloud_test/amethyst.json
+      - cloud_test/cloud_render.py
+      - .github/workflows/render-amethyst.yml
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg and fonts
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - name: Install Python packages
+        run: python -m pip install --disable-pip-version-check edge-tts pillow requests
+      - name: Render video
+        run: python cloud_test/cloud_render.py cloud_test/amethyst.json
+      - name: Upload MP4
+        uses: actions/upload-artifact@v4
+        with:
+          name: amethyst-five-minute-video
+          path: amethyst-five-minute.mp4
+          retention-days: 30
