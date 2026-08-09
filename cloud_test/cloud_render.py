@@ -28,6 +28,19 @@ def download_asset(scene, target):
             raise RuntimeError(f"Image too small: {filename} ({im.width}x{im.height})")
     print(f"Downloaded real asset: {filename}")
 
+def download_music(music, target):
+    filename = music["asset_filename"]
+    url = "https://commons.wikimedia.org/wiki/Special:Redirect/file/" + urllib.parse.quote(filename)
+    response = requests.get(url, headers={"User-Agent": USER_AGENT}, timeout=60)
+    response.raise_for_status()
+    content_type = response.headers.get("content-type", "")
+    if not (content_type.startswith("audio/") or content_type in {"application/ogg", "application/octet-stream"}):
+        raise RuntimeError(f"Not an audio file: {filename} ({content_type})")
+    target.write_bytes(response.content)
+    if target.stat().st_size < 100_000:
+        raise RuntimeError(f"Music file too small: {filename}")
+    print(f"Downloaded background music: {filename}")
+
 def ass_time(value):
     centiseconds = round(value * 100)
     h, centiseconds = divmod(centiseconds, 360000); m, centiseconds = divmod(centiseconds, 6000)
@@ -64,8 +77,9 @@ def main(job_path, preview=False):
     job = json.loads(Path(job_path).read_text())
     BUILD.mkdir(exist_ok=True)
     scenes = job["scenes"][:3] if preview else job["scenes"]
-    visuals = job.get("visuals", job["scenes"])
-    visuals = visuals[:3] if preview else visuals
+    groups = job.get("visual_groups")
+    visuals = ([asset for group in groups for asset in group["assets"]]
+               if groups else job.get("visuals", job["scenes"]))
     if preview:
         scenes = [{**s, "narration": re.split(r"(?<=[.!?])\s+", s["narration"])[0]} for s in scenes]
     script = "\n\n".join(s["narration"] for s in scenes)
@@ -76,8 +90,18 @@ def main(job_path, preview=False):
         "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", BUILD / "narration.mp3"
     ], text=True).strip())
     make_subtitles(script, duration, BUILD / "subtitles.ass")
-    scene_len = duration / len(visuals); segments = []
-    for i, scene in enumerate(visuals):
+    target_visual_seconds = float(job.get("visual_seconds", 6.0))
+    if preview:
+        preview_count = max(1, math.ceil(duration / target_visual_seconds))
+        visuals = visuals[:preview_count]
+    final_segment_seconds = duration - target_visual_seconds * (len(visuals) - 1)
+    if final_segment_seconds <= 0 or final_segment_seconds > target_visual_seconds * 1.5:
+        raise RuntimeError(
+            f"Visual count does not fit narration: {len(visuals)} images for {duration:.1f}s at {target_visual_seconds:.1f}s"
+        )
+    segment_lengths = [target_visual_seconds] * (len(visuals) - 1) + [final_segment_seconds]
+    segments = []
+    for i, (scene, scene_len) in enumerate(zip(visuals, segment_lengths)):
         image = BUILD / f"image-{i:02d}.jpg"
         download_asset(scene, image)
         segment = BUILD / f"segment-{i:02d}.mp4"
@@ -90,19 +114,18 @@ def main(job_path, preview=False):
     concat.write_text("".join(f"file '{p.name}'\n" for p in segments))
     silent = BUILD / "silent.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat, "-c", "copy", silent)
+    raw_music = BUILD / "background-music.ogg"
+    download_music(job["music"], raw_music)
     music = BUILD / "background-music.m4a"
-    music_source = (
-        f"aevalsrc=0.16*(sin(2*PI*110*t)+0.55*sin(2*PI*164.81*t)+"
-        f"0.45*sin(2*PI*220*t)+0.30*sin(2*PI*329.63*t)):s=48000:d={duration:.3f}"
-    )
-    run("ffmpeg", "-y", "-f", "lavfi", "-i", music_source, "-af",
-        f"lowpass=f=1200,tremolo=f=0.12:d=0.25,aecho=0.8:0.7:700:0.22,"
-        f"afade=t=in:st=0:d=4,afade=t=out:st={max(0, duration - 5):.3f}:d=5,volume=0.16",
-        "-c:a", "aac", "-b:a", "128k", music)
+    run("ffmpeg", "-y", "-stream_loop", "-1", "-i", raw_music, "-t", f"{duration:.3f}", "-af",
+        f"afade=t=in:st=0:d=4,afade=t=out:st={max(0, duration - 5):.3f}:d=5",
+        "-c:a", "aac", "-b:a", "160k", music)
     output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
     subtitle_filter = "subtitles=cloud_build/subtitles.ass"
     run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-i", music,
-        "-filter_complex", f"[0:v]{subtitle_filter}[v];[1:a][2:a]amix=inputs=2:duration=first:dropout_transition=2[a]",
+        "-filter_complex", f"[0:v]{subtitle_filter}[v];"
+        "[2:a]volume=0.24[bg];[bg][1:a]sidechaincompress=threshold=0.025:ratio=8:attack=20:release=500[ducked];"
+        "[1:a][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.95[a]",
         "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
         "-shortest", "-movflags", "+faststart", output)
     print(f"Created {output} ({duration:.1f} seconds)")
