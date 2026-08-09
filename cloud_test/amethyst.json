@@ -93,36 +93,140 @@
       "narration": "Amethyst rewards patient and careful observation. Look for growth lines, inclusions, fractures, and color zones. Every feature connects appearance with geological process. Move the crystal slowly beneath soft light. Purple tones will shift across its many faces. You are seeing chemistry shaped by immense spans of time."
     }
   ],
-  "visuals": [
-    {"asset_filename": "Amethyst Quartz Macro 1.JPG", "search": "amethyst macro"},
-    {"asset_filename": "Amethyst Quartz Macro 2.JPG", "search": "amethyst macro"},
-    {"asset_filename": "Amethyst macro.jpg", "search": "amethyst macro"},
-    {"asset_filename": "Amethyst 4.jpg", "search": "amethyst crystal"},
-    {"asset_filename": "WLA hmns amethyst geode.jpg", "search": "amethyst geode"},
-    {"asset_filename": "Amethyst (Brazil) 4 (32412593040).jpg", "search": "Brazil amethyst"},
-    {"asset_filename": "Amethyst geode.jpg", "search": "amethyst geode"},
-    {"asset_filename": "Amethyst crystal.jpg", "search": "amethyst crystal"},
-    {"asset_filename": "Amethyst (faceted) (Sebago Pluton, Early Permian, ~293 Ma; Deer Hill, north of Stow, Maine, USA) 10.jpg", "search": "faceted amethyst"},
-    {"asset_filename": "Facet Cut Amethyst.jpg", "search": "faceted amethyst"},
-    {"asset_filename": "Fausse citrine.jpg", "search": "heated amethyst"},
-    {"asset_filename": "Cardinal gems.png", "search": "historic amethyst"},
-    {"asset_filename": "Quartz var Amethyst Specimen 22.JPG", "search": "amethyst specimen"},
-    {"asset_filename": "Lapworth Museum of Geology - Amethyst.jpg", "search": "museum amethyst"},
-    {"asset_filename": "Amethyst Crystals, Cobalt Blue Glow (380880769).jpg", "search": "amethyst crystals"},
-    {"asset_filename": "Amethyst. Magaliesburg, South Africa.jpg", "search": "South Africa amethyst"},
-    {"asset_filename": "Amethyst 0110x (24659805717).jpg", "search": "amethyst mineral"},
-    {"asset_filename": "Amethyst 3148.jpg", "search": "amethyst specimen"},
-    {"asset_filename": "Amethyst Carnegie.jpg", "search": "amethyst collection"},
-    {"asset_filename": "Amethyst Cartagena.jpg", "search": "amethyst mineral"},
-    {"asset_filename": "Amethyst Crystal.jpg", "search": "amethyst crystal"},
-    {"asset_filename": "Amethyst Crystal (2933050796).jpg", "search": "amethyst point"},
-    {"asset_filename": "Amethyst Crystals (156431496).jpg", "search": "amethyst cluster"},
-    {"asset_filename": "Amethyst Druse.jpg", "search": "amethyst druse"},
-    {"asset_filename": "Amethyst Quartz Crystals.jpg", "search": "amethyst quartz"},
-    {"asset_filename": "Amethyst Siberia MNHN Minéralogie.jpg", "search": "Siberian amethyst"},
-    {"asset_filename": "Amethyst and drusy quartz cathedrals in Crystal Mountain Museum.jpg", "search": "amethyst cathedral"},
-    {"asset_filename": "Amethyst crystals.JPG", "search": "amethyst crystals"},
-    {"asset_filename": "Amethyst crystals close.jpg", "search": "amethyst close up"},
-    {"asset_filename": "Opened dark purple amethyst cathedral in Crystal Mountain Museum.jpg", "search": "dark amethyst cathedral"}
+  "visual_seconds": 6,
+  "music": {
+    "asset_filename": "Placid Ambient by MusicLFiles.ogg",
+    "title": "Placid Ambient",
+    "artist": "MusicLFiles",
+    "license": "CC BY 4.0",
+    "source": "https://commons.wikimedia.org/wiki/File:Placid_Ambient_by_MusicLFiles.ogg"
+  },
+  "visual_groups": [
+    {
+      "scene": "A violet first impression",
+      "assets": [
+        {"asset_filename": "Amethyst Quartz Macro 1.JPG"},
+        {"asset_filename": "Amethyst macro.jpg"},
+        {"asset_filename": "Amethyst crystals close.jpg"}
+      ]
+    },
+    {
+      "scene": "A member of the quartz family",
+      "assets": [
+        {"asset_filename": "Clear quartz, rock crystals 1.jpg"},
+        {"asset_filename": "Quartz var Rock Crystal NHMLA.png"},
+        {"asset_filename": "Amethyst Quartz Crystals.jpg"}
+      ]
+    },
+    {
+      "scene": "Where the purple comes from",
+      "assets": [
+        {"asset_filename": "Amethyst crystals with hematite inclusions 1.jpg"},
+        {"asset_filename": "Amethyst crystals (Hematite coated).jpg"},
+        {"asset_filename": "Amethyst red Stain.jpg"}
+      ]
+    },
+    {
+      "scene": "Zones written in crystal",
+      "assets": [
+        {"asset_filename": "Amethyst 4.jpg"},
+        {"asset_filename": "Amethyst 3148.jpg"},
+        {"asset_filename": "Amethyst flower crystal, Iraí, Rio Grande do Sul.jpg"}
+      ]
+    },
+    {
+      "scene": "Born inside open spaces",
+      "assets": [
+        {"asset_filename": "WLA hmns amethyst geode.jpg"},
+        {"asset_filename": "Amethyst-Geode NHM Wien.JPG"},
+        {"asset_filename": "Opened amethyst geode in Crystal Mountain Museum.jpg"},
+        {"asset_filename": "Amethyst Geode Brazil 2.jpg"}
+      ]
+    },
+    {
+      "scene": "Brazilian cathedrals",
+      "assets": [
+        {"asset_filename": "Amethyst (Brazil) 4 (32412593040).jpg"},
+        {"asset_filename": "Amethyst geode (Ametista do Sul, Rio Grande do Sul, Brazil) 1 (32248292103).jpg"},
+        {"asset_filename": "Amethyst geode (Ametista do Sul, Rio Grande do Sul, Brazil) 2 (32248291843).jpg"},
+        {"asset_filename": "Amethyst geode (Ametista do Sul, Rio Grande do Sul, Brazil) 3 (32248291563).jpg"}
+      ]
+    },
+    {
+      "scene": "The deep color of Uruguay",
+      "assets": [
+        {"asset_filename": "Amethyst (Uruguay) 1 (32411492720).jpg"},
+        {"asset_filename": "Amethyst (Uruguay) 3 (32639224652).jpg"},
+        {"asset_filename": "Amethyst (Uruguay) 6 (32792518995).jpg"}
+      ]
+    },
+    {
+      "scene": "Distinctive crystal forms",
+      "assets": [
+        {"asset_filename": "Amethyst crystal.jpg"},
+        {"asset_filename": "Amethyst sceptre2.jpg"},
+        {"asset_filename": "Améthyste sceptre (Tibet) 1.JPG"}
+      ]
+    },
+    {
+      "scene": "Hardness and durability",
+      "assets": [
+        {"asset_filename": "Amethyst (faceted) (Sebago Pluton, Early Permian, ~293 Ma; Deer Hill, north of Stow, Maine, USA) 10.jpg"},
+        {"asset_filename": "Four Peaks Amethyst Pendant Fountain Hills, AZ (400461881).jpg"},
+        {"asset_filename": "Amethyst Crystal (2933050796).jpg"},
+        {"asset_filename": "Amethyst Cartagena.jpg"}
+      ]
+    },
+    {
+      "scene": "From crystal to gemstone",
+      "assets": [
+        {"asset_filename": "Facet Cut Amethyst.jpg"},
+        {"asset_filename": "Amethyst Gems.jpg"},
+        {"asset_filename": "Four faceted amethysts 1.jpg"},
+        {"asset_filename": "Four faceted amethysts 2.jpg"}
+      ]
+    },
+    {
+      "scene": "Heat and transformation",
+      "assets": [
+        {"asset_filename": "Fausse citrine.jpg"},
+        {"asset_filename": "Green Amethyst.JPG"},
+        {"asset_filename": "Colored stones.JPG"}
+      ]
+    },
+    {
+      "scene": "A long human history",
+      "assets": [
+        {"asset_filename": "Cardinal gems.png"},
+        {"asset_filename": "Byzantine - Necklace - Walters 57544 - View A.jpg"},
+        {"asset_filename": "Egypt, Middle Kingdom, mostly Dynasty 12 - Necklace of Amulets - 1914.754 - Cleveland Museum of Art.tif"},
+        {"asset_filename": "Italy, Roman, 1st Century - Cameo- Head of a Woman - 1958.92 - Cleveland Museum of Art.tif"}
+      ]
+    },
+    {
+      "scene": "How to evaluate a specimen",
+      "assets": [
+        {"asset_filename": "Quartz var Amethyst Specimen 22.JPG"},
+        {"asset_filename": "Amethyst Carnegie.jpg"},
+        {"asset_filename": "Amethyst Siberia MNHN Minéralogie.jpg"}
+      ]
+    },
+    {
+      "scene": "Responsible collecting",
+      "assets": [
+        {"asset_filename": "Lapworth Museum of Geology - Amethyst.jpg"},
+        {"asset_filename": "Amethyst and drusy quartz cathedrals in Crystal Mountain Museum.jpg"},
+        {"asset_filename": "Amethyst large.JPG"}
+      ]
+    },
+    {
+      "scene": "The value of looking closely",
+      "assets": [
+        {"asset_filename": "Amethyst Crystals, Cobalt Blue Glow (380880769).jpg"},
+        {"asset_filename": "Raw amethyst crystals 1.jpg"},
+        {"asset_filename": "Raw amethyst crystals 2.jpg"},
+        {"asset_filename": "Close-up of Amethyst cluster in Crystal Mountain Museum.jpg"}
+      ]
+    }
   ]
 }
