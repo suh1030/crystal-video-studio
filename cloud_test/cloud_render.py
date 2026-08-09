@@ -76,12 +76,12 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
 def main(job_path, preview=False):
     job = json.loads(Path(job_path).read_text())
     BUILD.mkdir(exist_ok=True)
-    scenes = job["scenes"][:3] if preview else job["scenes"]
+    scenes = job["scenes"][:2] if preview else job["scenes"]
     groups = job.get("visual_groups")
+    if preview and groups:
+        groups = groups[:2]
     visuals = ([asset for group in groups for asset in group["assets"]]
                if groups else job.get("visuals", job["scenes"]))
-    if preview:
-        scenes = [{**s, "narration": re.split(r"(?<=[.!?])\s+", s["narration"])[0]} for s in scenes]
     script = "\n\n".join(s["narration"] for s in scenes)
     (BUILD / "narration.txt").write_text(script)
     run(sys.executable, "-m", "edge_tts", "--voice", job.get("voice", "en-US-AriaNeural"),
