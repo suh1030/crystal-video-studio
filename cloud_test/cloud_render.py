@@ -48,7 +48,7 @@ ScaledBorderAndShadow: yes
 
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Sentence,DejaVu Sans,28,&H00FFFFFF,&H00FFFFFF,&H78000000,&H78000000,0,0,0,0,100,100,0,0,3,8,0,2,60,60,48,1
+Style: Sentence,DejaVu Sans,30,&H00FFFFFF,&H00FFFFFF,&H78000000,&H78000000,0,0,0,0,100,100,0,0,3,8,0,2,60,60,48,1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -64,6 +64,8 @@ def main(job_path, preview=False):
     job = json.loads(Path(job_path).read_text())
     BUILD.mkdir(exist_ok=True)
     scenes = job["scenes"][:3] if preview else job["scenes"]
+    visuals = job.get("visuals", job["scenes"])
+    visuals = visuals[:3] if preview else visuals
     if preview:
         scenes = [{**s, "narration": re.split(r"(?<=[.!?])\s+", s["narration"])[0]} for s in scenes]
     script = "\n\n".join(s["narration"] for s in scenes)
@@ -74,24 +76,34 @@ def main(job_path, preview=False):
         "ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", BUILD / "narration.mp3"
     ], text=True).strip())
     make_subtitles(script, duration, BUILD / "subtitles.ass")
-    scene_len = duration / len(scenes); segments = []
-    for i, scene in enumerate(scenes):
+    scene_len = duration / len(visuals); segments = []
+    for i, scene in enumerate(visuals):
         image = BUILD / f"image-{i:02d}.jpg"
         download_asset(scene, image)
         segment = BUILD / f"segment-{i:02d}.mp4"
-        frames = max(1, math.ceil(scene_len * 30))
+        frames = max(2, math.ceil(scene_len * 30))
         run("ffmpeg", "-y", "-loop", "1", "-i", image, "-vf",
-            f"scale=2000:1125:force_original_aspect_ratio=increase,crop=2000:1125,zoompan=z='min(zoom+0.00035,1.08)':d={frames}:s=1920x1080:fps=30,format=yuv420p",
+            f"scale=2000:1125:force_original_aspect_ratio=increase,crop=2000:1125,zoompan=z='1+0.08*on/{frames - 1}':d={frames}:s=1920x1080:fps=30,format=yuv420p",
             "-t", f"{scene_len:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", segment)
         segments.append(segment)
     concat = BUILD / "concat.txt"
     concat.write_text("".join(f"file '{p.name}'\n" for p in segments))
     silent = BUILD / "silent.mp4"
     run("ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat, "-c", "copy", silent)
+    music = BUILD / "background-music.m4a"
+    music_source = (
+        f"aevalsrc=0.16*(sin(2*PI*110*t)+0.55*sin(2*PI*164.81*t)+"
+        f"0.45*sin(2*PI*220*t)+0.30*sin(2*PI*329.63*t)):s=48000:d={duration:.3f}"
+    )
+    run("ffmpeg", "-y", "-f", "lavfi", "-i", music_source, "-af",
+        f"lowpass=f=1200,tremolo=f=0.08:d=0.25,aecho=0.8:0.7:700:0.22,"
+        f"afade=t=in:st=0:d=4,afade=t=out:st={max(0, duration - 5):.3f}:d=5,volume=0.16",
+        "-c:a", "aac", "-b:a", "128k", music)
     output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
     subtitle_filter = "subtitles=cloud_build/subtitles.ass"
-    run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-vf", subtitle_filter,
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
+    run("ffmpeg", "-y", "-i", silent, "-i", BUILD / "narration.mp3", "-i", music,
+        "-filter_complex", f"[0:v]{subtitle_filter}[v];[1:a][2:a]amix=inputs=2:duration=first:dropout_transition=2[a]",
+        "-map", "[v]", "-map", "[a]", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-c:a", "aac", "-b:a", "192k",
         "-shortest", "-movflags", "+faststart", output)
     print(f"Created {output} ({duration:.1f} seconds)")
 
