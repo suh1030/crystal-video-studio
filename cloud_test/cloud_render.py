@@ -96,7 +96,7 @@ def main(job_path, preview=False):
         f"0.45*sin(2*PI*220*t)+0.30*sin(2*PI*329.63*t)):s=48000:d={duration:.3f}"
     )
     run("ffmpeg", "-y", "-f", "lavfi", "-i", music_source, "-af",
-        f"lowpass=f=1200,tremolo=f=0.08:d=0.25,aecho=0.8:0.7:700:0.22,"
+        f"lowpass=f=1200,tremolo=f=0.12:d=0.25,aecho=0.8:0.7:700:0.22,"
         f"afade=t=in:st=0:d=4,afade=t=out:st={max(0, duration - 5):.3f}:d=5,volume=0.16",
         "-c:a", "aac", "-b:a", "128k", music)
     output = ROOT / ("amethyst-visual-preview.mp4" if preview else "amethyst-five-minute.mp4")
